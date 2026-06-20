@@ -1,39 +1,69 @@
-import React from "react";
+const fieldConfig = {
+    url: {
+        label: "Website URL",
+        placeholder: "google.com",
+        hint: "Do not include https://",
+    },
+    format: {
+        label: "Image Format",
+        placeholder: "jpeg, png, or webp",
+    },
+    no_ads: {
+        label: "Remove Ads",
+        placeholder: "true or false",
+    },
+    no_cookie_banners: {
+        label: "Remove Banners",
+        placeholder: "true or false",
+    },
+    width: {
+        label: "Width (px)",
+        placeholder: "1920",
+    },
+    height: {
+        label: "Height (px)",
+        placeholder: "1080",
+    },
+};
 
 const APIForm = ({ inputs, handleChange, onSubmit }) => {
-    const inputsInfo = [
-        "Input a link to any website you would like to take a screenshot of. Do not include https or any protocol in the URL",
-        "Input which image format you would prefer for your screenshot: jpeg, png, or webp",
-        "Input true or false if you would like your website screenshot to not contain any ads",
-        "Input true or false if you would like your website screenshot to not contain of those annoying 'allow cookies' banners",
-        "Choose the width of your screenshot (in pixels)",
-        "Choose the height of your screenshot (in pixels)",
-      ];
     return (
-        <div>
-            <h2>Select Your Image Attributes:</h2>
-            <form className="form-container">
-                {inputs &&
-                    Object.entries(inputs).map(([category, value], index) => (
-                        <li className="form" key={index}>
-                            <h2>{category} </h2>
-                            <input
-                                type="text"
-                                name={category}
-                                value={value}
-                                placeholder="Input this attribute..."
-                                onChange={handleChange}
-                                className="textbox"
-                            />
-                            <br></br>
-                            <br></br>
-                            <p> {inputsInfo[index]}</p>
-                        </li>
-                    ))}
-            </form>
-            <button className="button" onClick={onSubmit}>
-                Take that Pic! 🎞
-            </button>
+        <div className="form-card">
+            <div className="form-card-header">
+                <h2>Screenshot Options</h2>
+                <p>All fields are optional except the URL.</p>
+            </div>
+
+            <div className="form-fields">
+                {Object.entries(inputs).map(([key, value]) => {
+                    const config = fieldConfig[key] || { label: key, placeholder: "" };
+                    return (
+                        <div className="form-row" key={key}>
+                            <label className="field-label">{config.label}</label>
+                            <div className="field-right">
+                                <input
+                                    type="text"
+                                    name={key}
+                                    value={value}
+                                    placeholder={config.placeholder}
+                                    onChange={handleChange}
+                                    className="textbox"
+                                />
+                                {config.hint && (
+                                    <p className="field-hint">{config.hint}</p>
+                                )}
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className="form-card-footer">
+                <span className="submit-note">Defaults applied for empty fields</span>
+                <button className="submit-btn" onClick={onSubmit}>
+                    Take Screenshot →
+                </button>
+            </div>
         </div>
     );
 };
